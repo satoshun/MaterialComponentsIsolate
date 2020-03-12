@@ -1,0 +1,17 @@
+import static dependencies.DependenciesKt.*
+
+apply plugin: 'com.android.library'
+apply plugin: "com.vanniktech.maven.publish"
+
+android {
+  compileSdkVersion COMPILE_SDK
+
+  defaultConfig {
+    minSdkVersion MIN_SDK
+  }
+}
+
+dependencies {
+  implementation APPCOMPAT
+  implementation MATERIAL
+}

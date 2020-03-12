@@ -12,8 +12,6 @@ android {
 }
 
 dependencies {
-  implementation project(':theme')
-
   implementation APPCOMPAT
   implementation MATERIAL
 }

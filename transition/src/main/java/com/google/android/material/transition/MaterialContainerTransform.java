@@ -1029,6 +1029,7 @@ public class MaterialContainerTransform extends Transition {
       }
     }
 
+    @SuppressLint("RestrictedApi")
     private void updateProgress(float progress) {
       this.progress = progress;
 

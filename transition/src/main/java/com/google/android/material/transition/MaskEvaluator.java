@@ -16,9 +16,7 @@
 
 package com.google.android.material.transition;
 
-import static androidx.core.util.Preconditions.checkNotNull;
-import static com.google.android.material.transition.TransitionUtils.lerp;
-
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.Path.Op;
@@ -26,10 +24,15 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+
 import androidx.annotation.RequiresApi;
+
 import com.google.android.material.shape.ShapeAppearanceModel;
 import com.google.android.material.shape.ShapeAppearancePathProvider;
 import com.google.android.material.transition.MaterialContainerTransform.ProgressThresholds;
+
+import static androidx.core.util.Preconditions.checkNotNull;
+import static com.google.android.material.transition.TransitionUtils.lerp;
 
 /**
  * A class which is responsible calculating the path which represents a container transform's
@@ -45,6 +48,7 @@ class MaskEvaluator {
   private final ShapeAppearancePathProvider pathProvider = new ShapeAppearancePathProvider();
 
   /** Update the mask used by this evaluator based on a given progress. */
+  @SuppressLint("RestrictedApi")
   void evaluate(
       float progress,
       ShapeAppearanceModel startShapeAppearanceModel,

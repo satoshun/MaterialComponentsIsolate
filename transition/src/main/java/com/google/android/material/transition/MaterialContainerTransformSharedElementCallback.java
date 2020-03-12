@@ -16,8 +16,7 @@
 
 package com.google.android.material.transition;
 
-import static com.google.android.material.transition.TransitionUtils.getRelativeBoundsRect;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
@@ -29,18 +28,23 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build.VERSION_CODES;
 import android.os.Parcelable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import android.transition.Transition;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.Window;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
 import com.google.android.material.internal.ContextUtils;
 import com.google.android.material.shape.Shapeable;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Map;
+
+import static com.google.android.material.transition.TransitionUtils.getRelativeBoundsRect;
 
 /**
  * A {@link SharedElementCallback} to be used for {@link MaterialContainerTransform} transitions.
@@ -77,6 +81,7 @@ public class MaterialContainerTransformSharedElementCallback extends SharedEleme
   }
 
   @Override
+  @SuppressLint("RestrictedApi")
   public void onMapSharedElements(
       @NonNull List<String> names, @NonNull Map<String, View> sharedElements) {
     if (!names.isEmpty() && !sharedElements.isEmpty()) {

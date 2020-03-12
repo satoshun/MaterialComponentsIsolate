@@ -16,6 +16,7 @@
 
 package com.google.android.material.transition;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Rect;
@@ -44,6 +45,7 @@ class TransitionUtils {
 
   private TransitionUtils() {}
 
+  @SuppressLint("RestrictedApi")
   static ShapeAppearanceModel convertToRelativeCornerSizes(
       ShapeAppearanceModel shapeAppearanceModel, final RectF bounds) {
     return shapeAppearanceModel.withTransformedCornerSizes(

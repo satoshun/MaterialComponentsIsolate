@@ -9,8 +9,8 @@ New features of 1.2.0-alphaXXX can be used depending on 1.1.0-stable.
 ```groovy
 implementation "com.google.android.material:material:1.1.0"
 
-implementation "com.github.satoshun.material:imageview:1.2.0-alpha05"
-implementation "com.github.satoshun.material:theme:1.2.0-alpha05"
+implementation "com.github.satoshun.material:imageview:1.2.0-alpha06"
+implementation "com.github.satoshun.material:theme:1.2.0-alpha06"
 ```
 
 ## transition
@@ -18,7 +18,7 @@ implementation "com.github.satoshun.material:theme:1.2.0-alpha05"
 ```groovy
 implementation "com.google.android.material:material:1.1.0"
 
-implementation "com.github.satoshun.material:transition:1.2.0-alpha05"
+implementation "com.github.satoshun.material:transition:1.2.0-alpha06"
 ```
 
 ## others classes

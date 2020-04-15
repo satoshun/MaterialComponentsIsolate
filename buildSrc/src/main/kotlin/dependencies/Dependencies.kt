@@ -4,10 +4,10 @@ const val COMPILE_SDK = 29
 const val MIN_SDK = 14
 const val TARGET_SDK = 29
 
-const val ANDROID_PLUGIN = "com.android.tools.build:gradle:3.6.1"
+const val ANDROID_PLUGIN = "com.android.tools.build:gradle:3.6.2"
 const val PUBLISH_PLUGIN = "com.vanniktech:gradle-maven-publish-plugin:0.9.0"
 
-const val KTX = "androidx.core:core-ktx:1.1.0"
+const val CORE = "androidx.core:core:1.2.0"
 
 const val APPCOMPAT = "androidx.appcompat:appcompat:1.1.0"
 const val RECYCLER_VIEW = "androidx.recyclerview:recyclerview:1.0.0"

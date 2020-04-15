@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Android Open Source Project
+ * Copyright 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,15 @@
 
 package com.google.android.material.transition;
 
+import com.github.satoshun.material.transition.R;
+
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
+
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.os.Build.VERSION_CODES;
-import android.transition.TransitionValues;
-import android.transition.Visibility;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,36 +32,37 @@ import androidx.annotation.Px;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.core.view.ViewCompat;
-
-import com.github.satoshun.material.transition.R;
-
+import android.transition.TransitionValues;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
-
 /**
- * A {@link Visibility} {@link android.transition.Transition} that provides a horizontal or vertical
- * slide over a specific distance.
+ * A class that can configure and create an {@link Animator} that slides a view vertically or
+ * horizontally slide over a specific distance.
  */
-@RequiresApi(VERSION_CODES.KITKAT)
-public class SlideDistance extends Visibility {
+@RequiresApi(VERSION_CODES.LOLLIPOP)
+public class SlideDistanceProvider implements VisibilityAnimatorProvider {
 
-  /** @hide */
+  private static final int DEFAULT_DISTANCE = -1;
+
+  /**
+   * GravityFlag definitions.
+   *
+   * @hide
+   */
   @RestrictTo(LIBRARY_GROUP)
   @IntDef({Gravity.LEFT, Gravity.TOP, Gravity.RIGHT, Gravity.BOTTOM, Gravity.START, Gravity.END})
   @Retention(RetentionPolicy.SOURCE)
   public @interface GravityFlag {}
 
   @GravityFlag private int slideEdge;
-  @Px private int slideDistance;
+  @Px private int slideDistance = DEFAULT_DISTANCE;
 
-  public SlideDistance(@NonNull Context context, @GravityFlag int slideEdge) {
+  public SlideDistanceProvider(@GravityFlag int slideEdge) {
     this.slideEdge = slideEdge;
-    this.slideDistance =
-        context
-            .getResources()
-            .getDimensionPixelSize(R.dimen.mtrl_transition_shared_axis_slide_distance);
   }
 
   @GravityFlag
@@ -75,36 +74,69 @@ public class SlideDistance extends Visibility {
     this.slideEdge = slideEdge;
   }
 
+  /**
+   * Get the distance this animator will translate its target. If set to -1, the default slide
+   * distance will be used.
+   *
+   * @see #setSlideDistance(int)
+   */
   @Px
   public int getSlideDistance() {
     return slideDistance;
   }
 
+  /**
+   * Set the distance this animator will translate its target.
+   *
+   * <p>By default, this value is set to -1 which indicates that the default slide distance,
+   * R.dimen.mtrl_transition_shared_axis_slide_distance will be used. Setting the slide distance to
+   * any other value will override this default.
+   *
+   * @throws IllegalArgumentException If {@code slideDistance} is negative.
+   */
   public void setSlideDistance(@Px int slideDistance) {
+    if (slideDistance < 0) {
+      throw new IllegalArgumentException(
+          "Slide distance must be positive. If attempting to reverse the direction of the slide,"
+              + " use setSlideEdge(int) instead.");
+    }
     this.slideDistance = slideDistance;
   }
 
-  @NonNull
+  @Nullable
   @Override
-  public Animator onAppear(
+  public Animator createAppear(
       @NonNull ViewGroup sceneRoot,
       @NonNull View view,
       @Nullable TransitionValues startValues,
       @Nullable TransitionValues endValues) {
-    return createTranslationAppearAnimator(sceneRoot, view);
+    return createTranslationAppearAnimator(
+        sceneRoot, view, slideEdge, getSlideDistanceOrDefault(view.getContext()));
   }
 
-  @NonNull
+  @Nullable
   @Override
-  public Animator onDisappear(
+  public Animator createDisappear(
       @NonNull ViewGroup sceneRoot,
       @NonNull View view,
       @Nullable TransitionValues startValues,
       @Nullable TransitionValues endValues) {
-    return createTranslationDisappearAnimator(sceneRoot, view);
+    return createTranslationDisappearAnimator(
+        sceneRoot, view, slideEdge, getSlideDistanceOrDefault(view.getContext()));
   }
 
-  private Animator createTranslationAppearAnimator(View sceneRoot, View view) {
+  private int getSlideDistanceOrDefault(Context context) {
+    if (slideDistance != DEFAULT_DISTANCE) {
+      return slideDistance;
+    }
+
+    return context
+        .getResources()
+        .getDimensionPixelSize(R.dimen.mtrl_transition_shared_axis_slide_distance);
+  }
+
+  private static Animator createTranslationAppearAnimator(
+      View sceneRoot, View view, @GravityFlag int slideEdge, @Px int slideDistance) {
     switch (slideEdge) {
       case Gravity.LEFT:
         return createTranslationXAnimator(view, slideDistance, 0);
@@ -125,7 +157,8 @@ public class SlideDistance extends Visibility {
     }
   }
 
-  private Animator createTranslationDisappearAnimator(View sceneRoot, View view) {
+  private static Animator createTranslationDisappearAnimator(
+      View sceneRoot, View view, @GravityFlag int slideEdge, @Px int slideDistance) {
     switch (slideEdge) {
       case Gravity.LEFT:
         return createTranslationXAnimator(view, 0, -slideDistance);
